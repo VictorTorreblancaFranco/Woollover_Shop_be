@@ -1,27 +1,28 @@
 // config/db.js
 
+require('dotenv').config();
 const sql = require('mssql');
-require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
 
 // Configuración de conexión a SQL Server
 const dbConfig = {
-    user: process.env.DB_USER, // 'sa'
-    password: process.env.DB_PASSWORD, // 'Admin12345'
-    server: process.env.DB_SERVER, // 'localhost' o '127.0.0.1'
-    database: process.env.DB_DATABASE, // 'WoolLoverDB'
+    user: process.env.DB_USER,           // e.g. 'sa'
+    password: process.env.DB_PASSWORD,   // e.g. 'Admin12345'
+    server: process.env.DB_SERVER,       // e.g. 'localhost'
+    database: process.env.DB_DATABASE,   // e.g. 'WoolLoverDB'
     options: {
-        encrypt: true, // Utiliza encriptación para conexiones seguras
-        trustServerCertificate: true, // Acepta certificados no verificados (útil para desarrollo)
-    },
+        encrypt: true,                     // para conexiones seguras
+        trustServerCertificate: true       // acepta certificados no verificados en dev
+    }
 };
 
 // Función para conectar a la base de datos
 async function connectDB() {
     try {
         await sql.connect(dbConfig);
-        console.log("Conexión a la base de datos establecida.");
+        console.log('✅ Conexión a la base de datos establecida.');
     } catch (err) {
-        console.error("Error de conexión a la base de datos: ", err);
+        console.error('❌ Error de conexión a la base de datos:', err);
+        process.exit(1); // sale del proceso si no hay conexión
     }
 }
 
